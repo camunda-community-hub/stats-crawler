@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  statscollector:
+    build: .
+    image: stats-collector
+    env_file: .env
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
