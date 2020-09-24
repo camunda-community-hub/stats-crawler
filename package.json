@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "start:prod": "node dst/app.js",
+    "start:prod": "node dist/app.js",
     "docker:build": "docker build -t stats-collector .",
     "docker:start": "docker-compose up -d && docker-compose logs -f",
     "docker:stop": "docker-compose down",
