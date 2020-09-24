@@ -8,8 +8,7 @@ import { envVarReplacer } from "./lib/env-var-replacer";
 import schedule from "node-schedule";
 import { bootstrapCamundaCloudIntegration } from "./lib/camunda-cloud";
 import dotenv from "dotenv";
-import { join } from "path";
-const configTemplate = require(join(__dirname, "config.json"));
+import configTemplate from "./config.json";
 
 dotenv.config();
 

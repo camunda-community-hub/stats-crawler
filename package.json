@@ -4,7 +4,9 @@
   "description": "A stats collector that runs on a schedule and updates a Google Sheet",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc",
+    "start:prod": "node dst/app.js"
   },
   "repository": {
     "type": "git",
