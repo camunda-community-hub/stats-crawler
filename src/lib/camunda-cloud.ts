@@ -44,6 +44,6 @@ export function bootstrapCamundaCloudIntegration({
 
   const executeWorker = zbc.createWorker({
     taskType: "stats-collection",
-    taskHandler: handlerFactory(process.env.TEST_SPREADSHEET_ID),
+    taskHandler: handlerFactory(process.env.TEST_SPREADSHEET),
   });
 }
