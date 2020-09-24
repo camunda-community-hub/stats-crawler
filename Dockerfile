@@ -4,7 +4,7 @@ FROM node:alpine as builder
 
 WORKDIR /app
 
-COPY ["./package.json", "/src/"]
+COPY ["./package.json", "/app/"]
 
 RUN npm ci
 
