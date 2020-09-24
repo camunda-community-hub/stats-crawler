@@ -8,7 +8,6 @@ export function bootstrapCamundaCloudIntegration({
   TIMEOUT_MS,
 }) {
   const zbc = new ZBClient();
-  console.log(__dirname); // DEBUG
   zbc
     .deployWorkflow([
       "../bpmn/Stats.Collector.bpmn",
