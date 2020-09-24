@@ -7,7 +7,7 @@ interface DiscourseForumQuery {
   apiUser: string;
 }
 
-export const discourseActorFn: StatsQueryActorFn<DiscourseForumQuery> = async (
+export const discourseForumStats: StatsQueryActorFn<DiscourseForumQuery> = async (
   msg
 ) => {
   const { startDate, endDate } = msg.range;

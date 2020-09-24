@@ -1,13 +1,19 @@
 import { start, dispatch, spawnStateless, query } from "nact";
-import { ZBClient } from "zeebe-node";
 import { npmPackageDownloads } from "./lib/npm-actor";
 import { statsCollectorActor } from "./lib/statsCollector";
 import { makeActor } from "./lib/actor";
-import { discourseActorFn } from "./lib/discourse-actor";
+import { discourseForumStats } from "./lib/discourse-actor";
 import { googleActor } from "./lib/google-actor";
 import { envVarReplacer } from "./lib/env-var-replacer";
-import fs from "fs";
-import path from "path";
+import schedule from "node-schedule";
+import { bootstrapCamundaCloudIntegration } from "./lib/camunda-cloud";
+import dotenv from "dotenv";
+import { join } from "path";
+const configTemplate = require(join(__dirname, "config.json"));
+
+dotenv.config();
+
+const STATS_QUERY = envVarReplacer(configTemplate);
 
 const TIMEOUT_MS = 45000;
 
@@ -34,42 +40,36 @@ spawnStateless(
 
 spawnStateless(
   statsCollector,
-  makeActor(discourseActorFn),
+  makeActor(discourseForumStats),
   Actor.discourseForumStats
 );
 
-const google = spawnStateless(statsCollector, googleActor, Actor.googleActor);
+const google = spawnStateless(system, googleActor, Actor.googleActor);
 
-const STATS_QUERY = envVarReplacer(
-  JSON.parse(fs.readFileSync(path.join(__dirname, `config.json`), "utf-8"))
-);
+// Run at 6am on the second of the month
+const rule = new schedule.RecurrenceRule();
+rule.date = 2;
+rule.hour = 6;
+rule.minute = 0;
 
-const zbc = new ZBClient();
-zbc
-  .deployWorkflow("./bpmn/Stats.Collector.bpmn")
-  .then(console.log)
-  .catch(console.error);
+const SCHEDULE = process.env.SCHEDULE || rule; // "0 0 6 2 *"
 
-const testWorker = zbc.createWorker({
-  taskType: "test-stats-collection",
-  taskHandler: async (_, complete) => {
-    console.log(__dirname);
-    query(
-      statsCollector,
-      (sender) => ({ query: STATS_QUERY, sender }),
-      TIMEOUT_MS
-    )
-      .then((res) => {
-        complete.success(res);
-        console.log("Posted results to Zeebe");
-        dispatch(google, {
-          outcome: res,
-          spreadsheetId: process.env.TEST_SPREADSHEET_ID,
-        });
-      })
-      .catch((err) => {
-        complete.failure(err);
-        console.log(err);
-      });
-  },
+const cronjob = schedule.scheduleJob(SCHEDULE, function () {
+  query(
+    statsCollector,
+    (sender) => ({ query: STATS_QUERY, sender }),
+    TIMEOUT_MS
+  ).then((outcome) =>
+    dispatch(google, {
+      outcome,
+      spreadsheetId: process.env.SPREADSHEET_ID,
+    })
+  );
+});
+
+bootstrapCamundaCloudIntegration({
+  statsCollector,
+  STATS_QUERY,
+  google,
+  TIMEOUT_MS,
 });

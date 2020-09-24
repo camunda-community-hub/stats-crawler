@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
 
 export function envVarReplacer<T>(config: T): T {
-  dotenv.config();
-
   replaceTemplateVars(config);
   return config;
 }
