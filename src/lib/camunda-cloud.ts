@@ -11,8 +11,8 @@ export function bootstrapCamundaCloudIntegration({
   console.log(__dirname); // DEBUG
   zbc
     .deployWorkflow([
-      "./bpmn/Stats.Collector.bpmn",
-      "./bpmn/Stats.Collector.Test.bpmn",
+      "../bpmn/Stats.Collector.bpmn",
+      "../bpmn/Stats.Collector.Test.bpmn",
     ])
     .then(console.log)
     .catch(console.error);
