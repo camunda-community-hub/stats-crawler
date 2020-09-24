@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-
 export function envVarReplacer<T>(config: T): T {
   replaceTemplateVars(config);
   return config;
@@ -32,9 +30,9 @@ function replaceTemplateVars(obj) {
 }
 
 function isTemplatedVar(value) {
-  return value.startsWith("{{") && value.endsWith("}}");
+  return value.startsWith("${{") && value.endsWith("}}");
 }
 
 function extractKeyFromTemplatedVar(value: string) {
-  return value.substring(2, value.length - 2);
+  return value.substring(3, value.length - 2);
 }

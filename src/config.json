@@ -16,8 +16,8 @@
   "discourseForumStats": [
     {
       "forumUrl": "https://forum.bpmn.io/admin/reports/bulk",
-      "apiKey": "{{BPMNIO_FORUM_API_KEY}}",
-      "apiUser": "{{BPMNIO_FORUM_API_USER}}",
+      "apiKey": "${{BPMNIO_FORUM_API_KEY}}",
+      "apiUser": "${{BPMNIO_FORUM_API_USER}}",
       "rename": {
         "posts": "bpmnio-forum-posts",
         "signups": "bpmnio-forum-signups"
@@ -25,8 +25,8 @@
     },
     {
       "forumUrl": "https://forum.zeebe.io/admin/reports/bulk",
-      "apiKey": "{{ZEEBE_FORUM_API_KEY}}",
-      "apiUser": "{{ZEEBE_FORUM_API_USER}}",
+      "apiKey": "${{ZEEBE_FORUM_API_KEY}}",
+      "apiUser": "${{ZEEBE_FORUM_API_USER}}",
       "rename": {
         "posts": "zeebe-forum-posts",
         "signups": "zeebe-forum-signups"
@@ -34,8 +34,8 @@
     },
     {
       "forumUrl": "https://forum.camunda.org/admin/reports/bulk",
-      "apiKey": "{{CAMUNDA_FORUM_API_KEY}}",
-      "apiUser": "{{CAMUNDA_FORUM_API_USER}}",
+      "apiKey": "${{CAMUNDA_FORUM_API_KEY}}",
+      "apiUser": "${{CAMUNDA_FORUM_API_USER}}",
       "rename": {
         "posts": "camunda-forum-posts",
         "signups": "camunda-forum-signups"

@@ -23,18 +23,18 @@ test("env-var-replacer", () => {
       {
         package: "whatever",
         rename: {
-          something: "{{TEST}}",
+          something: "${{TEST}}",
         },
       },
     ],
     discourse: [
       {
         forumUrl: "127.0.0.1",
-        apiKey: "{{TEST}}",
+        apiKey: "${{TEST}}",
       },
       {
         forumUrl: "8.8.8.8",
-        apiKey: "{{TEST2}}",
+        apiKey: "${{TEST2}}",
       },
     ],
   });
