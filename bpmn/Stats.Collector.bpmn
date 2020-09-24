@@ -14,6 +14,9 @@
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_03i3idb" sourceRef="Activity_1td8d0v" targetRef="Event_0goma9e" />
       <bpmn:serviceTask id="Activity_1td8d0v" name="Collect Stats">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="stats-collection" />
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_1j7yoq7</bpmn:incoming>
         <bpmn:outgoing>Flow_03i3idb</bpmn:outgoing>
       </bpmn:serviceTask>

@@ -2,8 +2,8 @@ dependencies:
   '@types/node': 14.11.2
   axios: 0.20.0
   dayjs: 1.8.36
-  deepmerge: 4.2.2
   dotenv: 8.2.0
+  google-spreadsheet: 3.0.13
   nact: 7.3.1
   zeebe-node: 0.24.0
 devDependencies:
@@ -921,6 +921,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-zg7Hz2k5lI8kb7U32998pRRFin7zJlkfezGJjUc2heaD4Pw2wObakCDVzkKztTm/Ln7eiVvYsjqak0Ed4LkMDA==
+  /axios/0.19.2:
+    dependencies:
+      follow-redirects: 1.5.10
+    dev: false
+    resolution:
+      integrity: sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   /axios/0.20.0:
     dependencies:
       follow-redirects: 1.13.0
@@ -1429,6 +1435,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
+  /debug/3.1.0:
+    dependencies:
+      ms: 2.0.0
+    dev: false
+    resolution:
+      integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
   /debug/3.2.6:
     dependencies:
       ms: 2.1.2
@@ -1481,6 +1493,7 @@ packages:
     resolution:
       integrity: sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
   /deepmerge/4.2.2:
+    dev: true
     engines:
       node: '>=0.10.0'
     resolution:
@@ -1837,6 +1850,14 @@ packages:
       node: '>=4.0'
     resolution:
       integrity: sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
+  /follow-redirects/1.5.10:
+    dependencies:
+      debug: 3.1.0
+    dev: false
+    engines:
+      node: '>=4.0'
+    resolution:
+      integrity: sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
   /for-in/1.0.2:
     dev: true
     engines:
@@ -2011,6 +2032,16 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-wS0ek4ZtFx/ACKYF3JhyGe5kzH7pgiQ7J5otlumqR9psmWMYc+U9cErKlCYVYHoUaidXHdZ2xbo34kB+S+24hA==
+  /google-spreadsheet/3.0.13:
+    dependencies:
+      axios: 0.19.2
+      google-auth-library: 6.1.0
+      lodash: 4.17.20
+    dev: false
+    engines:
+      node: '>=0.8.0'
+    resolution:
+      integrity: sha512-gaeOf9gT9UPqSY9gMUKxIsWI25LnZ+/XJTU6E5BWXx0NM9/hJOUEhX7O0PUU5NIfeg4xeaym5Yygq+AL9OZRcw==
   /got/9.6.0:
     dependencies:
       '@sindresorhus/is': 0.14.0
@@ -3139,7 +3170,6 @@ packages:
     resolution:
       integrity: sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
   /lodash/4.17.20:
-    dev: true
     resolution:
       integrity: sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
   /long/3.2.0:
@@ -3351,7 +3381,6 @@ packages:
     resolution:
       integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
   /ms/2.0.0:
-    dev: true
     resolution:
       integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
   /ms/2.1.2:
@@ -5042,8 +5071,8 @@ specifiers:
   '@types/node': ^14.11.2
   axios: ^0.20.0
   dayjs: ^1.8.36
-  deepmerge: ^4.2.2
   dotenv: ^8.2.0
+  google-spreadsheet: ^3.0.13
   jest: ^26.4.2
   nact: ^7.3.1
   ts-jest: ^26.4.0

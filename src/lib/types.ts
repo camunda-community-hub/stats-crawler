@@ -7,7 +7,7 @@ export enum MessageType {
   QUERY = "QUERY",
   QUERY_TEST = "QUERY_TEST",
 }
-interface MessageQuery {
+export interface MessageQuery {
   type: MessageType.QUERY;
   query: any;
 }
@@ -44,6 +44,6 @@ export type StatsQueryActor<T> = (
   ctx: ActorContext<any, ActorSystemRef>
 ) => void;
 
-export type StatsQueryActorFn<T> = (
-  query: StatsQueryMessage<T>
+export type StatsQueryActorFn<QueryShape> = (
+  msg: StatsQueryMessage<QueryShape>
 ) => Promise<any>;

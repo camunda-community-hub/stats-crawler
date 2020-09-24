@@ -1,69 +1,84 @@
-import { dispatch } from "nact";
 import dayjs from "dayjs";
-import merge from "deepmerge";
-import { MessageType, StatsCollectorMessage } from "./types";
+import { ActorContext, ActorSystemRef, dispatch, query } from "nact";
 import { renamerFactory } from "./renamerFactory";
 
-export const statsCollectorActor = (
-  state = {} as any,
-  msg: StatsCollectorMessage,
-  ctx
-) => {
-  switch (msg.type) {
-    case MessageType.QUERY_TEST:
-    case MessageType.QUERY: {
-      const startDate = dayjs().subtract(1, "month").startOf("month");
-      const endDate = startDate.endOf("month");
-      let expectedOutcomesCount = 0;
+const TIMEOUT_MS = 30000;
 
-      Object.keys(msg.query).forEach((actorName) =>
-        msg.query[actorName].forEach((query) => {
-          const msg = {
-            range: { startDate, endDate },
-            query,
-            renamerFn: renamerFactory(query.rename),
-            sender: ctx.self,
-          };
-          dispatch(ctx.children.get(actorName), msg);
-          expectedOutcomesCount++;
-        })
-      );
-
-      return {
-        ...state,
-        expectedOutcomesCount,
-        range: {
-          startDate: startDate.format("YYYY-MM-DD"),
-          endDate: endDate.format("YYYY-MM-DD"),
-        },
-        results: [],
-        errors: [],
-      };
-    }
-    case MessageType.RESULT:
-    case MessageType.ERROR: {
-      if (msg.type === MessageType.RESULT || msg.type === MessageType.ERROR) {
-        const newState =
-          msg.type === MessageType.RESULT
-            ? { ...state, results: merge(state.results, [msg.result]) }
-            : {
-                ...state,
-                errors: merge(state.errors, [msg.error]),
-              };
-        const outcomesCollectedCount =
-          newState.results.length + newState.errors.length;
-
-        if (outcomesCollectedCount === state.expectedOutcomesCount) {
-          dispatch(ctx.children.get("reportingActor"), newState);
-        }
-        return newState;
-      }
-    }
-    default:
-      return assertUnreachable(msg);
-  }
-};
-
-function assertUnreachable(type: never): never {
-  throw new Error("Missing type");
+interface QueryParams {
+  [queryParam: string]: any;
+  rename?: { [key: string]: string };
 }
+
+interface Query {
+  sender: ActorSystemRef;
+  query: {
+    [actorName: string]: QueryParams[];
+  };
+}
+
+export const statsCollectorActor = async (
+  queryMsg: Query,
+  ctx: ActorContext<any, ActorSystemRef>
+) => {
+  const startDate = dayjs().subtract(1, "month").startOf("month");
+  const endDate = startDate.endOf("month");
+
+  const tasks = Object.keys(queryMsg.query).flatMap((actorName) =>
+    queryMsg.query[actorName].map((q) =>
+      query(
+        ctx.children.get(actorName)!,
+        (sender) => ({
+          range: { startDate, endDate },
+          query: q,
+          renamerFn: renamerFactory(q.rename),
+          sender,
+        }),
+        TIMEOUT_MS
+      ).catch((e) =>
+        e.error
+          ? e
+          : {
+              error: {
+                actor: actorName,
+                query: { ...q, apiKey: "<REDACTED>" },
+                error: e.toString(),
+              },
+            }
+      )
+    )
+  );
+  const outcomes = await Promise.allSettled(tasks);
+  const response = outcomes.reduce(
+    (prev, curr) => {
+      if (curr.status === "fulfilled") {
+        return curr.value.result
+          ? {
+              ...prev,
+              results: { ...prev.results, ...curr.value.result },
+              errors: prev.errors,
+            }
+          : {
+              ...prev,
+              results: prev.results,
+              errors: [...prev.errors, curr.value.error],
+            };
+      } else {
+        return {
+          ...prev,
+          results: prev.results,
+          errors: [...prev.errors, { PromiseRejected: curr }],
+        };
+      }
+    },
+    {
+      startDate: {
+        year: startDate.format("YYYY"),
+        month: startDate.format("MM"),
+      },
+      results: [] as any[],
+      errors: [] as any[],
+    }
+  );
+
+  dispatch(queryMsg.sender, response);
+};

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { renamerFactory } from "./renamerFactory";
 import { StatsQueryActorFn } from "./types";
 
 const URL = "https://npm-stat.com/api/download-counts";

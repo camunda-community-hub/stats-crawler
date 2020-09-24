@@ -1,5 +1,5 @@
 import { dispatch } from "nact";
-import { MessageType, StatsQueryActor, StatsQueryMessage } from "./types";
+import { StatsQueryActor, StatsQueryMessage } from "./types";
 
 export function makeActor<T>(
   fn: (query: StatsQueryMessage<T>) => Promise<any>
@@ -8,18 +8,16 @@ export function makeActor<T>(
     fn(msg)
       .then((result) =>
         dispatch(msg.sender, {
-          result: msg.renamerFn(result),
-          type: MessageType.RESULT,
+          result: { ...msg.renamerFn(result) },
         })
       )
       .catch((e) =>
         dispatch(msg.sender, {
           error: {
             actor: ctx.name,
-            query: { ...msg.query, apiKey: "XXXXXXX" },
+            query: { ...msg.query, apiKey: "<REDACTED>" },
             error: e.toString(),
           },
-          type: MessageType.ERROR,
         })
       );
   };
