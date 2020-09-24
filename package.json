@@ -8,7 +8,7 @@
     "build": "tsc",
     "start:prod": "node dist/app.js",
     "docker:build": "docker build -t stats-collector .",
-    "docker:start": "docker-compose up -d && docker-compose logs -f",
+    "docker:start": "docker-compose up --build -d && docker-compose logs -f",
     "docker:stop": "docker-compose down",
     "docker:logs": "docker-compose logs -f"
   },
