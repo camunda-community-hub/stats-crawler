@@ -1,6 +1,8 @@
 config.private.json
 .env
 .vscode
+dist
+
 # Logs
 logs
 *.log
