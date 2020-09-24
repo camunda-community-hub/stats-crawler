@@ -1,5 +1,6 @@
 import { query, dispatch } from "nact";
 import { ZBClient } from "zeebe-node";
+import path from "path";
 
 export function bootstrapCamundaCloudIntegration({
   statsCollector,
@@ -10,8 +11,8 @@ export function bootstrapCamundaCloudIntegration({
   const zbc = new ZBClient();
   zbc
     .deployWorkflow([
-      "../bpmn/Stats.Collector.bpmn",
-      "../bpmn/Stats.Collector.Test.bpmn",
+      path.join(__dirname, "..", "..", "bpmn", "Stats.Collector.bpmn"),
+      path.join(__dirname, "..", "..", "bpmn", "Stats.Collector.Test.bpmn"),
     ])
     .then(console.log)
     .catch(console.error);
