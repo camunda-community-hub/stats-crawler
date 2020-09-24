@@ -39,6 +39,10 @@ export interface StatsQueryMessage<T> {
   renamerFn: (result: { [key: string]: any }) => { [key: string]: any };
 }
 
+export interface StatsQueryActorResult {
+  [metricName: string]: number;
+}
+
 export type StatsQueryActor<T> = (
   msg: StatsQueryMessage<T>,
   ctx: ActorContext<any, ActorSystemRef>
@@ -46,4 +50,4 @@ export type StatsQueryActor<T> = (
 
 export type StatsQueryActorFn<QueryShape> = (
   msg: StatsQueryMessage<QueryShape>
-) => Promise<any>;
+) => Promise<StatsQueryActorResult>;
