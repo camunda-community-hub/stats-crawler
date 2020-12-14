@@ -1,53 +1,44 @@
-import dayjs from "dayjs";
-import { ActorContext, ActorSystemRef, Ref } from "nact";
+export interface IStatsCollectorConfig {
+  npmPackageDownloads: INpmPackageConfig[];
+  discourseForumStats: IDiscourseForumConfig[];
+}
 
-export enum MessageType {
-  ERROR = "ERROR",
-  RESULT = "RESULT",
-  QUERY = "QUERY",
-  QUERY_TEST = "QUERY_TEST",
+interface DateRange {
+  startDate: string;
+  endDate: string;
 }
-export interface MessageQuery {
-  type: MessageType.QUERY;
-  query: any;
-}
-interface MessageQueryTest {
-  type: MessageType.QUERY_TEST;
-  query: any;
-}
-interface MessageResult {
-  type: MessageType.RESULT;
-  result: any;
-}
-interface MessageError {
-  type: MessageType.ERROR;
-  error: any;
-}
-export type StatsCollectorMessage =
-  | MessageError
-  | MessageQuery
-  | MessageResult
-  | MessageQueryTest;
 
-export interface StatsQueryMessage<T> {
-  range: {
-    startDate: dayjs.Dayjs;
-    endDate: dayjs.Dayjs;
+export interface IStatsCollectorQuery extends IStatsCollectorConfig, DateRange {
+  spreadsheetId: string;
+}
+
+export interface INpmPackageQuery extends INpmPackageConfig, DateRange {}
+
+export interface IDiscourseForumQuery
+  extends IDiscourseForumConfig,
+    DateRange {}
+
+export interface INpmPackageConfig {
+  packageName: string;
+  rename: {
+    downloads: string;
   };
-  query: T;
-  sender: Ref<any>;
-  renamerFn: (result: { [key: string]: any }) => { [key: string]: any };
 }
 
-export interface StatsQueryActorResult {
-  [metricName: string]: number;
+export interface IDiscourseForumConfig {
+  forumUrl: string;
+  apiKey: string;
+  apiUser: string;
+  rename: {
+    posts: string;
+    signups: string;
+  };
 }
 
-export type StatsQueryActor<T> = (
-  msg: StatsQueryMessage<T>,
-  ctx: ActorContext<any, ActorSystemRef>
-) => void;
+export interface IndividualResult {
+  [key: string]: string;
+}
 
-export type StatsQueryActorFn<QueryShape> = (
-  msg: StatsQueryMessage<QueryShape>
-) => Promise<StatsQueryActorResult>;
+export interface StatsResult extends IStatsCollectorQuery {
+  results: IndividualResult[];
+}
