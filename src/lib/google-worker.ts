@@ -8,29 +8,29 @@ export function startGoogleWorker(zbc: ZBClient) {
   return zbc.createWorker<StatsResult>(
     "write-google-sheet",
     async (job, complete) => {
-      const outcome = job.variables;
-      const startDate = dayjs(outcome.startDate);
-      const spreadsheet = await openSpreadsheet(outcome.spreadsheetId);
+      const { startDate, spreadsheetId, results } = job.variables;
+      const { year, month } = dayjs(startDate);
+      const spreadsheet = await openSpreadsheet(spreadsheetId);
 
-      await createMissingTabs(spreadsheet, Object.keys(outcome.results), [
+      await createMissingTabs(spreadsheet, Object.keys(results), [
         "year",
         "month",
         "count",
       ]).catch(console.log);
 
-      outcome.results.forEach(async (result) => {
+      results.forEach(async (result) => {
         for (const tabName in result) {
           let sheetIndex = getSheetIndexByTitle(spreadsheet, tabName);
           let count = result[tabName];
           await spreadsheet.sheetsByIndex[sheetIndex].addRow({
-            year: startDate.year,
-            month: startDate.month,
+            year: year(),
+            month: month(),
             count,
           });
         }
       });
 
-      console.log(JSON.stringify(outcome, null, 2));
+      console.log(JSON.stringify(job.variables, null, 2));
       console.log("Posted result to Google Sheets");
       complete.success();
     }
