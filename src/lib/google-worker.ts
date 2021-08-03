@@ -5,9 +5,9 @@ import dayjs from "dayjs";
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 
 export function startGoogleWorker(zbc: ZBClient) {
-  return zbc.createWorker<StatsResult>(
-    "write-google-sheet",
-    async (job, complete) => {
+  return zbc.createWorker<StatsResult>({
+    taskType: "write-google-sheet",
+    taskHandler: async job => {
       const { startDate, spreadsheetId, results } = job.variables;
       const { year, month } = dayjs(startDate);
       const spreadsheet = await openSpreadsheet(spreadsheetId);
@@ -32,9 +32,9 @@ export function startGoogleWorker(zbc: ZBClient) {
 
       console.log(JSON.stringify(job.variables, null, 2));
       console.log("Posted result to Google Sheets");
-      complete.success();
+      return job.complete();
     }
-  );
+  });
 }
 
 async function openSpreadsheet(docId) {

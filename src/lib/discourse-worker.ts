@@ -4,9 +4,9 @@ import { renamerFactory } from "./renamerFactory";
 import { IDiscourseForumQuery, IndividualResult } from "./types";
 
 export function startDiscourseWorker(zbc: ZBClient) {
-  return zbc.createWorker<IDiscourseForumQuery, {}, IndividualResult>(
-    "discourse-stat",
-    (job, complete) => {
+  return zbc.createWorker<IDiscourseForumQuery, {}, IndividualResult>({
+    taskType: "discourse-stat",
+    taskHandler: job => {
       const {
         apiKey,
         apiUser,
@@ -18,7 +18,7 @@ export function startDiscourseWorker(zbc: ZBClient) {
       let result = { posts: 0, signups: 0 };
 
       console.log(`Downloading forum stats for ${forumUrl}`);
-      axios
+      return axios
         .get(forumUrl, {
           headers: {
             "Api-Key": apiKey,
@@ -34,6 +34,7 @@ export function startDiscourseWorker(zbc: ZBClient) {
         })
         .then((response) => {
           response.data.reports.forEach((report) => {
+            // deepcode ignore PrototypePollution: <please specify a reason of ignoring this>
             result[report.type] = report.data.reduce(
               (acc, item) => acc + item.y,
               0
@@ -41,9 +42,9 @@ export function startDiscourseWorker(zbc: ZBClient) {
           });
           const res = renamerFactory(rename)(result);
 
-          complete.success(res);
+          return job.complete(res);
         })
-        .catch((e) => complete.failure(`${forumUrl} - ${e.message}`));
+        .catch((e) => job.fail(`${forumUrl} - ${e.message}`));
     }
-  );
+  });
 }

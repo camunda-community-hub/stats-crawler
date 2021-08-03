@@ -12,7 +12,7 @@ function replaceTemplateVars(obj) {
           ? process.env[extractKeyFromTemplatedVar(value)]
           : value;
       } else if (typeof obj[key] === "object" || Array.isArray(obj[key])) {
-        return replaceTemplateVars(obj[key]);
+        replaceTemplateVars(obj[key]);
       }
     });
   }
@@ -23,7 +23,7 @@ function replaceTemplateVars(obj) {
           obj[index] = extractKeyFromTemplatedVar(element);
         }
       } else if (typeof element === "object" || Array.isArray(element)) {
-        return replaceTemplateVars(element);
+        replaceTemplateVars(element);
       }
     });
   }
