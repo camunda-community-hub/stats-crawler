@@ -13,7 +13,7 @@ export interface IStatsCollectorQuery extends IStatsCollectorConfig, DateRange {
 }
 
 export interface INpmPackageQuery extends DateRange {
-  npmPackageStat: INpmPackageConfig
+  npmPackageDownload: INpmPackageConfig
 }
 
 export interface IDiscourseForumQuery extends DateRange {
