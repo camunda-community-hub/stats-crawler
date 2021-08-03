@@ -17,7 +17,7 @@
       <bpmn:outgoing>Flow_1jgg63o</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
         <bpmn:extensionElements>
-          <zeebe:loopCharacteristics inputCollection="=npmPackageDownloads" inputElement="npmPackageDownload" outputCollection="results" outputElement="=result" />
+          <zeebe:loopCharacteristics inputCollection="=npmPackageDownloads" inputElement="npmPackageDownload" outputCollection="results1" outputElement="=result" />
         </bpmn:extensionElements>
       </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="Event_1he31oh">
@@ -47,7 +47,7 @@
       <bpmn:outgoing>Flow_1smpavl</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
         <bpmn:extensionElements>
-          <zeebe:loopCharacteristics inputCollection="=discourseForumStats" inputElement="discourseForumStat" outputCollection="results" outputElement="=result" />
+          <zeebe:loopCharacteristics inputCollection="=discourseForumStats" inputElement="discourseForumStat" outputCollection="results2" outputElement="=result" />
         </bpmn:extensionElements>
       </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="Event_1umxeye">
@@ -83,6 +83,9 @@
     <bpmn:serviceTask id="Activity_0vbkr50" name="Write to Google Spreadsheet">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="write-google-sheet" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="= concatenate(result1, result2)" target="results" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_12ppyot</bpmn:incoming>
       <bpmn:outgoing>Flow_1fyk9c7</bpmn:outgoing>
