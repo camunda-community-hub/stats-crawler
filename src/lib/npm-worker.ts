@@ -9,7 +9,8 @@ export function startNpmWorker(zbc: ZBClient) {
   return zbc.createWorker<INpmPackageQuery, {}, IndividualResult>({
     taskType: "npm-stat",
     taskHandler: job => {
-      const { packageName, rename, endDate, startDate } = job.variables;
+      const { packageName, rename } = job.variables.npmPackageStat;
+      const { endDate, startDate } = job.variables;
       console.info(`Downloading npm stats for ${packageName}`);
       let result = { downloads: 0 };
 

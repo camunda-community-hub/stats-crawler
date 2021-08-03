@@ -12,11 +12,14 @@ export interface IStatsCollectorQuery extends IStatsCollectorConfig, DateRange {
   spreadsheetId: string;
 }
 
-export interface INpmPackageQuery extends INpmPackageConfig, DateRange {}
+export interface INpmPackageQuery extends DateRange {
+  npmPackageStat: INpmPackageConfig
+}
 
-export interface IDiscourseForumQuery
-  extends IDiscourseForumConfig,
-    DateRange {}
+export interface IDiscourseForumQuery extends DateRange {
+  discourseForumStat: IDiscourseForumConfig 
+} 
+
 
 export interface INpmPackageConfig {
   packageName: string;

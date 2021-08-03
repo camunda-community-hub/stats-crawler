@@ -7,6 +7,12 @@
       <bpmn:outgoing>Flow_184hii4</bpmn:outgoing>
     </bpmn:parallelGateway>
     <bpmn:subProcess id="Activity_138bzl1" name="NPM Statistics">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:input source="= startDate" target="startDate" />
+          <zeebe:input source="= endDate" target="endDate" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0yq61z1</bpmn:incoming>
       <bpmn:outgoing>Flow_1jgg63o</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
@@ -31,6 +37,12 @@
       </bpmn:serviceTask>
     </bpmn:subProcess>
     <bpmn:subProcess id="Activity_0bah1ux" name="Discourse Statistics">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:input source="= startDate" target="startDate" />
+          <zeebe:input source="= endDate" target="endDate" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_184hii4</bpmn:incoming>
       <bpmn:outgoing>Flow_1smpavl</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">

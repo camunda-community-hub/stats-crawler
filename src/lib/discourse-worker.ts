@@ -10,11 +10,10 @@ export function startDiscourseWorker(zbc: ZBClient) {
       const {
         apiKey,
         apiUser,
-        endDate,
         forumUrl,
         rename,
-        startDate,
-      } = job.variables;
+      } = job.variables.discourseForumStat;
+      const { endDate, startDate} = job.variables
       let result = { posts: 0, signups: 0 };
 
       console.log(`Downloading forum stats for ${forumUrl}`);
