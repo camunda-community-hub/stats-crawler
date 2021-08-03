@@ -4,7 +4,7 @@ import { renamerFactory } from "./renamerFactory";
 import { IDiscourseForumQuery, IndividualResult } from "./types";
 
 export function startDiscourseWorker(zbc: ZBClient) {
-  return zbc.createWorker<IDiscourseForumQuery, {}, IndividualResult>({
+  return zbc.createWorker<IDiscourseForumQuery, {}, {result: IndividualResult}>({
     taskType: "discourse-stat",
     taskHandler: job => {
       const {
@@ -41,7 +41,7 @@ export function startDiscourseWorker(zbc: ZBClient) {
           });
           const res = renamerFactory(rename)(result);
 
-          return job.complete(res);
+          return job.complete({result: res});
         })
         .catch((e) => job.fail(`${forumUrl} - ${e.message}`));
     }

@@ -18,7 +18,7 @@ export function startGoogleWorker(zbc: ZBClient) {
         "count",
       ]).catch(console.log);
 
-      results.forEach(async (result) => {
+      results.flatMap(async (result) => {
         for (const tabName in result) {
           let sheetIndex = getSheetIndexByTitle(spreadsheet, tabName);
           let count = result[tabName];

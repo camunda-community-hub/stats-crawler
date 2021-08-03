@@ -6,7 +6,7 @@ import { IndividualResult, INpmPackageQuery } from "./types";
 const URL = "https://npm-stat.com/api/download-counts";
 
 export function startNpmWorker(zbc: ZBClient) {
-  return zbc.createWorker<INpmPackageQuery, {}, IndividualResult>({
+  return zbc.createWorker<INpmPackageQuery, {}, {result: IndividualResult}>({
     taskType: "npm-stat",
     taskHandler: job => {
       const { packageName, rename } = job.variables.npmPackageDownload;
@@ -35,7 +35,7 @@ export function startNpmWorker(zbc: ZBClient) {
           result.downloads = sum;
           const res = renamerFactory(rename)(result);
 
-          return job.complete(res);
+          return job.complete({result: res});
         })
         .catch(e => job.fail(`${packageName} - ${e.message}`));
     }
