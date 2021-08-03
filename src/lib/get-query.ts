@@ -13,13 +13,13 @@ export function startGetQueryWorker(
     prodSheet: string;
   }
 ) {
-  return zbc.createWorker<{ test?: boolean }, {}, IStatsCollectorQuery>(
-    "get-query",
-    (job, complete) => {
+  return zbc.createWorker<{ test?: boolean }, {}, IStatsCollectorQuery>({
+    taskType: "get-query",
+    taskHandler: job => {
       const startDate = dayjs().subtract(1, "month").startOf("month");
       const endDate = startDate.endOf("month").format("YYYY-MM-DD");
 
-      complete.success({
+      return job.complete({
         ...STATS_QUERY,
         startDate: startDate.format("YYYY-MM-DD"),
         endDate,
@@ -28,5 +28,5 @@ export function startGetQueryWorker(
           : spreadsheetIds.prodSheet,
       });
     }
-  );
+  });
 }

@@ -21,12 +21,12 @@ const zbc = new ZBClient();
 
 schedule.scheduleJob(SCHEDULE, function () {
   zbc
-    .createWorkflowInstance("run-stats-collector", { test: false })
+    .createProcessInstance("run-stats-collector", { test: false })
     .then(console.log);
 });
 
 zbc
-  .deployWorkflow(
+  .deployProcess(
     path.join(__dirname, "..", "..", "bpmn", "Stats.Collector.v2.bpmn")
   )
   .then(console.log)
