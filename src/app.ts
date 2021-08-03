@@ -27,7 +27,7 @@ schedule.scheduleJob(SCHEDULE, function () {
 
 zbc
   .deployProcess(
-    path.join(__dirname, "..", "..", "bpmn", "Stats.Collector.v2.bpmn")
+    path.join(__dirname, "..", "bpmn", "Stats.Collector.v2.bpmn")
   )
   .then(console.log)
   .catch(console.error);
