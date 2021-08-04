@@ -10,6 +10,9 @@ export function startGoogleWorker(zbc: ZBClient) {
     taskHandler: async job => {
       const { startDate, spreadsheetId, results } = job.variables;
       const { year, month } = dayjs(startDate);
+
+      console.log(JSON.stringify(job.variables, null, 2));
+
       const spreadsheet = await openSpreadsheet(spreadsheetId);
 
       await createMissingTabs(spreadsheet, Object.keys(results), [
@@ -18,7 +21,7 @@ export function startGoogleWorker(zbc: ZBClient) {
         "count",
       ]).catch(console.log);
 
-      results.flatMap(async (result) => {
+      results.forEach(async (result) => {
         for (const tabName in result) {
           let sheetIndex = getSheetIndexByTitle(spreadsheet, tabName);
           let count = result[tabName];
@@ -30,7 +33,6 @@ export function startGoogleWorker(zbc: ZBClient) {
         }
       });
 
-      console.log(JSON.stringify(job.variables, null, 2));
       console.log("Posted result to Google Sheets");
       return job.complete();
     }
