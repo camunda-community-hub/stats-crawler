@@ -84,7 +84,7 @@
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="write-google-sheet" retries="3" />
         <zeebe:ioMapping>
-          <zeebe:input source="= concatenate(result1, result2)" target="results" />
+          <zeebe:input source="= concatenate(results1, results2)" target="results" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_12ppyot</bpmn:incoming>
