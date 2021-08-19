@@ -9,7 +9,9 @@ export function startGoogleWorker(zbc: ZBClient) {
     taskType: "write-google-sheet",
     taskHandler: async job => {
       const { startDate, spreadsheetId, results } = job.variables;
-      const { year, month } = dayjs(startDate);
+      const d = dayjs(startDate);
+      const year = d.year();
+      const month = d.month();
 
       console.log(JSON.stringify(job.variables, null, 2));
 
@@ -21,17 +23,17 @@ export function startGoogleWorker(zbc: ZBClient) {
         "count",
       ]).catch(console.log);
 
-      results.forEach(async (result) => {
+      await Promise.all(results.map(async (result) => {
         for (const tabName in result) {
           let sheetIndex = getSheetIndexByTitle(spreadsheet, tabName);
           let count = result[tabName];
           await spreadsheet.sheetsByIndex[sheetIndex].addRow({
-            year: year(),
-            month: month(),
+            year,
+            month,
             count,
           });
         }
-      });
+      }));
 
       console.log("Posted result to Google Sheets");
       return job.complete();
