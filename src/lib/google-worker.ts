@@ -11,7 +11,7 @@ export function startGoogleWorker(zbc: ZBClient) {
       const { startDate, spreadsheetId, results } = job.variables;
       const d = dayjs(startDate);
       const year = d.year();
-      const month = d.month();
+      const month = d.month() + 1;
 
       console.log(JSON.stringify(job.variables, null, 2));
 
