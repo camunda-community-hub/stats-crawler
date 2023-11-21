@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/jwulf/stats-crawler#readme",
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^1.0.0",
     "dayjs": "^1.8.36",
     "dotenv": "^8.2.0",
     "google-spreadsheet": "^3.0.13",
